@@ -30,6 +30,7 @@ var lost = true;
 var circle;
 var playerCircle;
 var user;
+var highScore;
 
 init();
 
@@ -51,14 +52,17 @@ function init() {
     ctx.fillText("Press return to start the game!", 400, 400, 500);
     ctx.fillStyle = "#ffffff";
 
-
+    if(!JSON.parse(localStorage.getItem('highScoreCircleMatch'))){
+      highScore = "No highscore"
+    } else {
+      highScore = JSON.parse(localStorage.getItem('highScoreCircleMatch'));
+    }
 
     ctxHigh.font = "18px Verdana";
     ctxHigh.fillStyle = "#ffffff";
     ctxHigh.textAlign = "center";
-    ctxHigh.fillText("Highscore", 100,200, 500);
-    ctxHigh.fillText("comming", 100,300, 500);
-    ctxHigh.fillText("soon!", 100,400, 500);
+    ctxHigh.fillText("Highscore:", 100,250, 500);
+    ctxHigh.fillText(user + " - " + highScore, 100,300, 500);
 }
 
 generateNewCircles(level);
@@ -153,39 +157,39 @@ function check_collision() {
 function generateNewCircles(level) {
   if(level == 1){
     circle = new Circle(400, 300, 70, 50, 1, c.width, c.height);
-    playerCircle = new Circle(400, 300, 140, 10, 1, c.width, c.height);
+    playerCircle = new Circle(400, 300, 140, 5, 1, c.width, c.height);
   }
   if(level == 2){
     circle = new Circle(400, 300, randRadius(10, 100), 50, 1.5, c.width, c.height);
-    playerCircle = new Circle(400, 300, randRadius((circle.getRadius()+50),150), 10, 1.5, c.width, c.height);
+    playerCircle = new Circle(400, 300, randRadius((circle.getRadius()+50),150), 5, 1.5, c.width, c.height);
   }
   if(level == 3){
     circle = new Circle(400, 300, randRadius(10, 100), randLineWidth(50,5), 1.5, c.width, c.height);
-    playerCircle = new Circle(400, 300, randRadius((circle.getRadius()+50),150), randLineWidth(circle.getLineWidth(),2), 1.5, c.width, c.height);
+    playerCircle = new Circle(400, 300, randRadius((circle.getRadius()+50),150), 5, 1.5, c.width, c.height);
   }
   if(level == 4){
     randPosX = randPos();
     randPosY = randPos();
     circle = new Circle(randPosX, randPosY, randRadius(10, 100), randLineWidth(50,5), 1.5, c.width, c.height);
-    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), randLineWidth(circle.getLineWidth(),2), 1.5, c.width, c.height);
+    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), 5, 1.5, c.width, c.height);
   }
   if(level == 5){
     randPosX = randPos();
     randPosY = randPos();
     circle = new Circle(randPosX, randPosY, randRadius(10, 100), randLineWidth(50,5), 1.75, c.width, c.height);
-    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), randLineWidth(circle.getLineWidth(),2), 1.75, c.width, c.height);
+    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), 5, 1.75, c.width, c.height);
   }
   if(level == 6){
     randPosX = randPos();
     randPosY = randPos();
     circle = new Circle(randPosX, randPosY, randRadius(10, 100), randLineWidth(50,5), 2, c.width, c.height);
-    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), randLineWidth(circle.getLineWidth(),2), 2, c.width, c.height);
+    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), 5, 2, c.width, c.height);
   }
   if(level == "ELITE!"){
     randPosX = randPos();
     randPosY = randPos();
     circle = new Circle(randPosX, randPosY, randRadius(10, 100), randLineWidth(50,5), 2.5, c.width, c.height);
-    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), randLineWidth(circle.getLineWidth(),2), 2.5, c.width, c.height);
+    playerCircle = new Circle(randPosX, randPosY, randRadius((circle.getRadius()+50),150), 5, 2.5, c.width, c.height);
   }
 }
 
@@ -212,11 +216,24 @@ function youLoose() {
   ctx.fillText("You loose!", 400, 300, 500);
   ctx.font = "30px Verdana";
   ctx.fillText("Press return to restart the game!", 400, 350, 500);
-
   checkHighscore(points);
 }
 
-function checkHighscore(score) {
-  var reader = new FileReader();
-  var filePath = "highscore.txt";
+//check the highscore
+function checkHighscore(points) {
+  if(!JSON.parse(localStorage.getItem('highScoreCircleMatch'))){
+    localStorage.setItem('highScoreCircleMatch', JSON.stringify(points));
+  } else {
+    highScore = JSON.parse(localStorage.getItem('highScoreCircleMatch'));
+    if(highScore <= points){
+      localStorage.setItem('highScoreCircleMatch', JSON.stringify(points));
+    }
+  }
+
+  ctxHigh.clearRect(0, 0, cHigh.width, cHigh.height);
+  ctxHigh.font = "18px Verdana";
+  ctxHigh.fillStyle = "#ffffff";
+  ctxHigh.textAlign = "center";
+  ctxHigh.fillText("Highscore:", 100,250, 500);
+  ctxHigh.fillText(JSON.parse(localStorage.getItem('userNameCircleMatch')) + " - " + JSON.parse(localStorage.getItem('highScoreCircleMatch')), 100,300, 500);
 }
