@@ -7,10 +7,24 @@ document.addEventListener("keyup", keyUpHandler, false);
 var keyPressed = false;
 var points = 0;
 var level = 1;
-var lost = false;
+var lost = true;
 var circle;
 var playerCircle;
-game_interval = setInterval(gameLoop, 16);
+
+init();
+
+function init() {
+    ctx.font = "50px Verdana";
+    ctx.fillStyle = "#985A41";
+    ctx.textAlign = "center";
+    ctx.fillText("Circle Match!", 400,250, 500);
+    ctx.font = "30px Verdana";
+    ctx.fillStyle = "#D1A588"
+    ctx.fillText("Use spacebar to match the circles!", 400, 350, 700);
+    ctx.font = "20px Verdana";
+    ctx.fillText("Press return to start the game!", 400, 400, 500);
+    ctx.fillStyle = "#ffffff"
+}
 
 generateNewCircles();
 
@@ -18,8 +32,6 @@ generateNewCircles();
 function gameLoop() {
   ctx.clearRect(0, 0, c.width, c.height);
   ctx.font = "18px Verdana";
-  ctx.fillStyle = "#ffffff";
-  ctx.textAlign = "center";
   ctx.fillText("Score: " + points + " - Level: " + level  , 100, 30, 500);
 
   ctx.beginPath();
@@ -147,7 +159,6 @@ function youLoose() {
   lost = true;
   clearInterval(game_interval);
   ctx.font = "40px Verdana";
-  ctx.fillStyle = "#ffffff";
   ctx.fillText("You loose!", 400, 300, 500);
   ctx.font = "30px Verdana";
   ctx.fillText("Press return to restart the game!", 400, 350, 500);
